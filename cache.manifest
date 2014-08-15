@@ -5,3 +5,5 @@ CACHE MANIFEST
 /script/distance.js
 /script/position.js
 /vendor/jquery-2.1.1.min.js
+/vendor/angular.min.js
+/vendor/angular-route.min.js
