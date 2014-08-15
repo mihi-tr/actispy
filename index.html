@@ -1,26 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" ng-app="actispyApp">
   <head>
-  </head>
-  <body>
-    <svg id="gps" width="20" height="20">
-        <circle cx="10" cy="10" r="10" fill="#FF5555"></circle>
-    </svg>
-    <div id="start">
-        <button id="start">Start</button>
-    </div>
-    <div id = "clock">
-        <span id="hours">0</span>:
-        <span id="minutes">0</span>:
-        <span id="seconds">0</span>
-    </div>
-    <div id = "distance">
-        <span>0</span> Km
-    </div>
-    <script src="vendor/jquery-2.1.1.min.js"></script>
     <script src="vendor/angular.min.js"></script>
     <script src="vendor/angular-route.min.js"></script>
-    <script src="script/distance.js"></script>
-    <script src="script/position.js" /></script>
+    <script src="script/app.js"></script>
+    <script src="script/controllers.js"></script>
+  </head>
+  <body>
+    <div ng-view></div>
   </body>
 </html>
