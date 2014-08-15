@@ -1,0 +1,17 @@
+{
+    "name":"Actispy",
+    "description":"Actispy is an activity tracker to track activities such as running, cycling or hiking.",
+    "launch_path": "/index.html",
+    "icons": {
+        "128": "/images/icon-128.png"
+        },
+    "developer": {
+        "name": "Michael Bauer",
+        "url": "http://tentacleriot.eu"
+        },
+    "permissions": {
+        "geolocation": {
+            "description": "Actispy wants to know where you are so you can track speed, pace and distance among others"}
+        },
+    "appcache_path" : "/cache.manifest"
+}

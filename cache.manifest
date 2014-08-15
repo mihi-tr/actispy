@@ -1,0 +1,7 @@
+CACHE MANIFEST
+# v1 - 2011-08-13
+# This is a comment.
+/index.html
+/script/distance.js
+/script/position.js
+/vendor/jquery-2.1.1.min.js
