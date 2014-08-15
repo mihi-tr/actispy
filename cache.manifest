@@ -3,7 +3,12 @@ CACHE MANIFEST
 # This is a comment.
 /index.html
 /script/distance.js
-/script/position.js
+/script/app.js
+/script/controllers.js
 /vendor/jquery-2.1.1.min.js
 /vendor/angular.min.js
 /vendor/angular-route.min.js
+/vendor/angular-touch.min.js
+/partials/menu.html
+/partials/new.html
+/images/logo-128.png
