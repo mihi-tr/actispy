@@ -1,13 +1,20 @@
 
 <div class="display" ng-swipe-right="menu()">
-<button ng-click="menu()">&#x21e6;</button>
+<button ng-click="menu()" class="pure-button">&#x21e6;</button>
     <div id="time">
         {{hours}}:{{minutes}}:{{seconds}}
     </div>
     <div id="distance">
         {{activity.distance}} Km
     </div>
+    <div id="accuracy">
+        {{ accuracy }} m
+    </div>
 </div>
 <div id="start">
-<button ng-click="toggleStart()">{{action}}</button>
+<div class="pure-g">
+<button class="pure-u-1 pure-button pure-button-{{buttonstatus}}" ng-click="toggleStart()">{{action}}</button>
 </div>
+</div>
+    <div id="map">
+    </div>

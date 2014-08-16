@@ -1,0 +1,15 @@
+#map {
+    width: 100%;
+    height: 200px;
+    margin-top: 10px;
+    }
+
+.pure-button-success {
+    color: white;
+    background: rgb(28, 184, 65); /* this is a green */
+    }
+
+.pure-button-warning {
+    color: white;
+    background: rgb(223, 117, 20); /* this is an orange */
+    }

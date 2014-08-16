@@ -9,6 +9,16 @@ CACHE MANIFEST
 /vendor/angular.min.js
 /vendor/angular-route.min.js
 /vendor/angular-touch.min.js
+/vendor/images/layers-2x.png    
+/vendor/images/marker-shadow.png  
+/vendor/images/layers.png       
+/vendor/images/marker-icon.png  
+/vendor/images/marker-icon-2x.png  
+/vendor/leaflet-src.js          
+/vendor/leaflet.css             
+/vendor/leaflet.js      
+/vendor/pure-min.css
 /partials/menu.html
 /partials/new.html
+/css/actispy.css
 /images/logo-128.png
