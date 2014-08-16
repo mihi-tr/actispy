@@ -1,20 +1,41 @@
-
-<div class="display" ng-swipe-right="menu()">
-<button ng-click="menu()" class="pure-button">&#x21e6;</button>
-    <div id="time">
-        {{hours}}:{{minutes}}:{{seconds}}
+<button ng-click="menu()" class="pure-button button-back">&#x21e6;</button>
+<div class="selectors pure-g">
+    <button ng-click="setActivity('running')" 
+        ng-class="{selected: activity.type == 'running' }" class="pure-button">
+        <i class="running"></i>
+    </button>
+    <button ng-click="setActivity('cycling')" 
+        ng-class="{selected: activity.type == 'cycling' }" class="pure-button">
+        <i class="cycling"></i>
+    </button>
+    <button ng-click="setActivity('hiking')" 
+        ng-class="{selected: activity.type == 'hiking'}" class="pure-button">
+        <i class="hiking"></i>
+    </button>
+</div>
+<div class="display pure-g" ng-swipe-right="menu()">
+    <div id="time" class="pure-u-1-2">
+        <h2>Timer</h2>
+        {{ timer }}
     </div>
-    <div id="distance">
-        {{activity.distance}} Km
+    <div id="distance" class="pure-u-1-2">
+        <h2>Distance (km)</h2>
+        {{ activity.distance  | number: 3 }} 
     </div>
-    <div id="accuracy">
-        {{ accuracy }} m
+    <div id="pace" class="pure-u-1-1">
+    <h2>Pace (min/km)</h2>
+        <div class="pure-g">
+        <div class="pure-u-1-2">
+        <small>cur</small> {{ activity.pace | number: 2  }} 
+        </div>
+        <div class="pure-u-1-2">
+        <small>avg</small> {{ activity.averagepace | number: 2 }} 
+        </div>
+        </div>
     </div>
 </div>
-<div id="start">
 <div class="pure-g">
 <button class="pure-u-1 pure-button pure-button-{{buttonstatus}}" ng-click="toggleStart()">{{action}}</button>
-</div>
 </div>
     <div id="map">
     </div>

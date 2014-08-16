@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="startmarker.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="53.953934"
+     inkscape:cx="277.84216"
+     inkscape:cy="785.71429"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1364"
+     inkscape:window-height="748"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="arc"
+       style="fill:#1cb841;fill-opacity:0.61924684;stroke:#1cb841;stroke-width:30.32063386000000094;stroke-miterlimit:4;stroke-dasharray:none;opacity:0.80000000000000004;stroke-opacity:1"
+       id="path2985"
+       sodipodi:cx="281.42856"
+       sodipodi:cy="266.64789"
+       sodipodi:rx="55.714287"
+       sodipodi:ry="71.428574"
+       d="m 337.14285,266.64789 a 55.714287,71.428574 0 1 1 -111.42858,0 55.714287,71.428574 0 1 1 111.42858,0 z"
+       transform="matrix(0.07467463,0,0,0.05826535,260.41298,251.11156)"
+       inkscape:export-filename="/home/mihi/Source/actispy/images/marker.png"
+       inkscape:export-xdpi="89.189972"
+       inkscape:export-ydpi="89.189972" />
+  </g>
+</svg>
