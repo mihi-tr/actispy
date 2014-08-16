@@ -126,3 +126,29 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
         $scope.activity.type=type;
         }
     }])
+
+// activities controller   
+actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
+    // Go back to the menu
+    $scope.menu = function() {
+        window.location.hash = "#/menu";
+        }
+    
+    }])
+// settings controller   
+actispyControllers.controller('SettingsCtrl', ['$scope' , function($scope) {
+    // Go back to the menu
+    $scope.menu = function() {
+        window.location.hash = "#/menu";
+        }
+    
+    }])
+
+// about controller
+actispyControllers.controller('AboutCtrl', ['$scope' , function($scope) {
+    // Go back to the menu
+    $scope.menu = function() {
+        window.location.hash = "#/menu";
+        }
+    
+    }])

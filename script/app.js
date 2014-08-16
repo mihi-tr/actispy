@@ -16,6 +16,18 @@ actispyApp.config(['$routeProvider',
         templateUrl: 'partials/new.html',
         controller: 'NewActivityCtrl'
       }).
+      when('/activities', {
+        templateUrl: 'partials/activities.html',
+        controller: 'ActivitiesCtrl'
+      }).
+      when('/settings', {
+        templateUrl: 'partials/settings.html',
+        controller: 'SettingsCtrl'
+      }).
+      when('/about', {
+        templateUrl: 'partials/about.html',
+        controller: 'AboutCtrl'
+      }).
       otherwise({
         redirectTo: '/menu'
       });
