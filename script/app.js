@@ -20,6 +20,10 @@ actispyApp.config(['$routeProvider',
         templateUrl: 'partials/activities.html',
         controller: 'ActivitiesCtrl'
       }).
+      when('/activity/:starttime', {
+        templateUrl: 'partials/activity.html',
+        controller: 'ActivityCtrl'
+        }).
       when('/settings', {
         templateUrl: 'partials/settings.html',
         controller: 'SettingsCtrl'

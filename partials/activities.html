@@ -3,7 +3,8 @@
 
 <h1>Activities</h1>
 <ul class="activitylist">
-    <li ng-repeat="activity in activities | orderBy: '-starttime' " class="pure-g">
+    <li ng-repeat="activity in activities | orderBy: '-starttime' " class="pure-g"
+        ng-click="openActivity(activity.starttime)">
         <i class="icon {{activity.type}}"></i>
         <div class="pure-u-20-24">
             <h2>{{activity.start}}</h2>

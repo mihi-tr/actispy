@@ -120,7 +120,6 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             }
         
         // stopping
-
         else {
             $scope.action = "Saving...";
             $scope.buttonstatus = "disabled";
@@ -156,7 +155,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 console.log("saved activity to 'actispy/" +
                 $scope.activity.starttime + ".json'");
                 // redirect to activities
-                window.location.hash = "#/activities";
+                window.location.hash = "#/activity/"+$scope.activity.starttime;
                 }
 
             request.onerror=function() {
@@ -169,6 +168,9 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
     
     // Go back to the menu
     $scope.menu = function() {
+        // stop watching the geolocation.
+        navigator.geolocation.clearWatch($scope.iwatchid);
+        navigator.geolocation.clearWatch($scope.watchid);
         window.location.hash = "#/menu";
         }
 
@@ -190,13 +192,98 @@ actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
             .toUTCString().split(" ")[4];
         };
     $scope.activities=activities;
-    // Go back to the menu
 
+    // Open Activity
+    $scope.openActivity = function(starttime) { 
+        window.location.hash = "#/activity/"+starttime;
+        };
+
+    // Go back to the menu
     $scope.menu = function() {
         window.location.hash = "#/menu";
         }
     
     }])
+
+// Activity view controller
+actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
+    function($scope,$routeParams) {
+        // say loading until fully loaded 
+        $scope.loaded = false;
+        $scope.message = "loading...";
+        console.log($routeParams);
+
+        // load activity from sdcard
+        var sdcard= navigator.getDeviceStorage('sdcard');
+        var filename = 'actispy/'+$routeParams.starttime+'.json';
+        console.log("trying to load '"+filename+"'");
+        var request = sdcard.get(filename);
+        request.onsuccess = function() {
+            console.log("success!");
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function() {
+                $scope.activity= JSON.parse(this.result);
+                $scope.message = "loaded";
+                $scope.loaded = true;
+                console.log($scope.activity);
+                $scope.duration = new Date($scope.activity.duration)
+                    .toUTCString().split(" ")[4];
+                
+                $scope.start=new Date($scope.activity.starttime)
+                    .toString().split(" ").slice(1,5).join(" ");
+                //set up map
+                var map=L.map('map');
+                L.tileLayer('http://{s}.tiles.mapbox.com/v3/mihi-tr.j8ec7a21/{z}/{x}/{y}.png',
+                        {
+                        attribution: 'Map data &copy; OpenStreetMap, CC-BY-SA, Imagery &copy; Mapbox',
+                        maxZoom: 18
+                        }).addTo(map);
+                
+                var line=L.polyline([$scope.activity.startposition], {color: "#000080",
+                    opacity: 0.8}).addTo(map);
+
+                for (i in $scope.activity.points) {
+                    var p = $scope.activity.points[i].coords;
+                    line.addLatLng([p.lat,p.lng]);
+                    };
+                
+                map.fitBounds(line.getBounds());
+                var starticon= L.icon({
+                    iconUrl: 'images/start-marker.png',
+                    iconSize: [10,10],
+                    iconAnchor: [5,5]
+                    });
+                var stopicon= L.icon({
+                    iconUrl: 'images/start-marker.png',
+                    iconSize: [10,10],
+                    iconAnchor: [5,5]
+                    });
+                
+                L.marker($scope.activity.startposition, 
+                        {icon: starticon}).addTo(map);
+                L.marker($scope.activity.endposition, 
+                        {icon: stopicon}).addTo(map);
+                
+                $scope.$apply();
+            });
+            reader.readAsText(this.result);
+            };
+
+        request.onerror = function() {
+            $scope.message = "Error to load file: "+ this.error.name;
+            console.log(this.error);
+            console.log($routeParams.starttime);
+            console.log(request);
+            $scope.$apply();
+            };
+
+        // Go back to the menu
+        $scope.menu = function() {
+            window.location.hash = "#/activities";
+            }
+    
+    }])
+
 // settings controller   
 actispyControllers.controller('SettingsCtrl', ['$scope' , function($scope) {
 
