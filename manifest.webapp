@@ -19,7 +19,7 @@
     "fullscreen": "true",
     "orientation": "portrait",
     "type":"privileged",
-    "version":"0.1-SNAPSHOT"
+    "version":"0.1"
 
 
 }
