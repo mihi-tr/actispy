@@ -19,14 +19,15 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
 
     // set up leaflet.
     var map = L.map('map')
-    L.tileLayer('http://{s}.tiles.mapbox.com/v3/mihi-tr.j8ec7a21/{z}/{x}/{y}.png', {
+    L.tileLayer(Config.data.tileserver || 'http://{s}.tiles.mapbox.com/v3/mihi-tr.j8ec7a21/{z}/{x}/{y}.png', 
+        {
         attribution: 'Map data &copy; OpenStreetMap, CC-BY-SA, Imagery &copy; Mapbox',
             maxZoom: 18
             }).addTo(map);
 
     // watch for sattelite accuracy
     $scope.iwatchid = navigator.geolocation.watchPosition(function(p) {
-        var ma = parseInt(localStorage.getItem("min-accuracy")) | 10;
+        var ma = Config.data.minAccuracy | 10;
         $scope.accuracy = Math.round(p.coords.accuracy);
         if ( p.coords.accuracy <= ma ) {
             $scope.action = "Start"; 
@@ -80,13 +81,27 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.line = L.polyline([$scope.lastposition], {color: "#000080",
                     opacity: 0.8}).addTo(map);
             $scope.startmarker = L.marker($scope.lastposition,
-                {icon: icon}).addTo(map)
+                {icon: icon}).addTo(map);
+
             // the uppdater - watches the position and updates!
             $scope.watchid = navigator.geolocation.watchPosition(function(p) {
                 var time=new Date().getTime();
                 var dt=new Date(time - $scope.activity.starttime);
                 $scope.timer = dt.toUTCString().split(" ")[4]
                 
+                $scope.$apply();
+
+                //if accuracy is not good enough - do nothing.
+                var ma = Config.data.minAccuracy || 10;
+                if (p.coords.accuracy > ma) {
+                    return null;
+                    }
+                // if capture interval has not passed - do nothing.
+                var ci = Config.data.captureInterval || 5;
+                if (time - $scope.lasttime < ci*1000) {
+                    return null;
+                    };
+
                 var cp = L.latLng(p.coords.latitude,    p.coords.longitude,
                     p.coords.altitude);
                 if ($scope.lastposition) {
@@ -233,7 +248,7 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                     .toString().split(" ").slice(1,5).join(" ");
                 //set up map
                 var map=L.map('map');
-                L.tileLayer('http://{s}.tiles.mapbox.com/v3/mihi-tr.j8ec7a21/{z}/{x}/{y}.png',
+                L.tileLayer(Config.data.tileserver || 'http://{s}.tiles.mapbox.com/v3/mihi-tr.j8ec7a21/{z}/{x}/{y}.png',
                         {
                         attribution: 'Map data &copy; OpenStreetMap, CC-BY-SA, Imagery &copy; Mapbox',
                         maxZoom: 18
@@ -287,16 +302,7 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
 // settings controller   
 actispyControllers.controller('SettingsCtrl', ['$scope' , function($scope) {
 
-    var sdcard = navigator.getDeviceStorage('sdcard');
-    var r = sdcard.freeSpace();
-    r.onsuccess = function() {
-        console.log(this.result);
-        $scope.free = this.result;
-        $scope.$apply();
-        }
-    r.onerror = function() {
-        console.log(this.error);
-        }
+    $scope.config = Config;
 
     // Go back to the menu
     $scope.menu = function() {

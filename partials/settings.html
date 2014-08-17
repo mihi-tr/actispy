@@ -1,6 +1,14 @@
 <div ng-swipe-right="menu()">
 <button ng-click="menu()" class="pure-button button-back">&#x21e6;</button>
-<div>
-    {{free}}
+<form class="pure-form">
+<label for="minAccuracy">Minimal Accuracy (m)</label>
+<input id="minAccuracy" type="number" ng-model="config.data.minAccuracy" />
+<label for="captureInterval">Capture Interval (s)</label>
+<input id="captureInterval" type="number" ng-model="config.data.captureInterval" />
+<label for="tileServer">Tile Server <small>e.g http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png</label>
+<input id="tileServer" type="text" ng-model="config.data.tileserver" />
+</form>
+<div class="pure-g">
+<button class="pure-u-1-1 pure-button pure-button-success" ng-click="config.save()">Save</button>
 </div>
 </div>
