@@ -106,6 +106,8 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                     $scope.$apply();
                 }, function() {}, {enableHighAccuracy : true});
             }
+        
+        // stopping
 
         else {
             $scope.action = "Start";
@@ -113,6 +115,18 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.activity.endtime=new Date().getTime();
             $scope.activity.endposition=[$scope.lastposition.lat,
                 $scope.lastposition.lon];
+            var lsa = {
+                "starttime": $scope.activity.starttime,
+                "duration": $scope.activity.endtime-$scope.activity.starttime,
+                "type": $scope.activity.type,
+                "distance": $scope.activity.distance,
+                "averagepace": $scope.activity.averagepace
+                }
+            var activities = JSON.parse(
+                localStorage.getItem("activities")) || []
+            activities.push(lsa);
+            localStorage.setItem("activities",JSON.stringify(activities));
+            window.location.hash = "#/activities";
             }
         };
     
@@ -129,7 +143,18 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
 
 // activities controller   
 actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
+    var activities = JSON.parse(
+        localStorage.getItem("activities")) || [];
+    for (i in activities) {
+        activities[i].start = new Date(activities[i].starttime)
+            .toString()
+            .split(" ").slice(1,5).join(" ");
+        activities[i].duration = new Date(activities[i].duration)
+            .toUTCString().split(" ")[4];
+        };
+    $scope.activities=activities;
     // Go back to the menu
+
     $scope.menu = function() {
         window.location.hash = "#/menu";
         }
@@ -137,6 +162,18 @@ actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
     }])
 // settings controller   
 actispyControllers.controller('SettingsCtrl', ['$scope' , function($scope) {
+
+    var sdcard = navigator.getDeviceStorage('sdcard');
+    var r = sdcard.freeSpace();
+    r.onsuccess = function() {
+        console.log(this.result);
+        $scope.free = this.result;
+        $scope.$apply();
+        }
+    r.onerror = function() {
+        console.log(this.error);
+        }
+
     // Go back to the menu
     $scope.menu = function() {
         window.location.hash = "#/menu";

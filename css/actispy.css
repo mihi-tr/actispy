@@ -12,10 +12,12 @@
 .pure-button {
     padding-left: 0;
     padding-right: 0;
+    font-size: 1.5em;
     }
 .button-back {
     padding-left: 0.5em;
     padding-right: 0.5em;
+    font-size: 1em;
     }
 .pure-button-success {
     color: white;
@@ -58,13 +60,17 @@ h1 > img {
     display: inline-block;
     height: 2em;
     width: 2em;
-    background-size: 100%;
     }
 
+.icon {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    }
 .selectors button {
     margin: 5px 2.5px;
-    padding-left: 2em;
-    padding-right: 2em;
+    padding: 0.5em 2em;
+    font-size: 1em;
     }
 
 .selectors button.selected {
@@ -72,13 +78,38 @@ h1 > img {
     }
 
 .running {
-    background: url('/images/icon-128.png');
+    background: url('/images/icon-128.png') no-repeat;
+    background-size: 100%;
     }
 
 .cycling {
-    background: url('/images/icon-cycling.png');
+    background: url('/images/icon-cycling.png') no-repeat;
+    background-size: 100%;
+
     }
 
 .hiking {
-    background: url('/images/icon-hiking.png');
+    background: url('/images/icon-hiking.png') no-repeat;
+    background-size: 100%;
+    }
+
+.activitylist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    }
+.activitylist li {
+    background-color: #F0F0F0;
+    border-radius: 2px;
+    margin-bottom: 5px;
+    }
+.activitylist li ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    }
+
+.activitylist h2 {
+    margin-top: 0px;
+    margin-bottom: 2px;
     }

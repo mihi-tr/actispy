@@ -11,7 +11,16 @@
         },
     "permissions": {
         "geolocation": {
-            "description": "Actispy wants to know where you are so you can track speed, pace and distance among others"}
+            "description": "Actispy wants to know where you are so you can track speed, pace and distance among others"},
+        "device-storage:sdcard": {
+            "description": "Actispy stores data on your sdcard",
+            "access": "readwrite"} 
         },
-    "appcache_path" : "/cache.manifest"
+    "appcache_path" : "/cache.manifest",
+    "fullscreen": "true",
+    "orientation": "portrait",
+    "type":"privileged",
+    "version":"0.1-SNAPSHOT"
+
+
 }

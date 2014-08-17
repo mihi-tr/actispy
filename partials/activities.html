@@ -1,0 +1,16 @@
+<div ng-swipe-right="menu()">
+<button ng-click="menu()" class="pure-button button-back">&#x21e6;</button>
+
+<h1>Activities</h1>
+<ul class="activitylist">
+    <li ng-repeat="activity in activities" class="pure-g">
+        <i class="icon {{activity.type}}"></i>
+        <div class="pure-u-20-24">
+            <h2>{{activity.start}}</h2>
+            <ul>
+                <li>Duration: {{activity.duration}}</li>
+                <li>Distance: {{activity.distance  | number: 3 }}km</li>
+            </ul>
+        </div>
+    </li>
+</ul>
