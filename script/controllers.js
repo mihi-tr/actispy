@@ -66,7 +66,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
         if ( $scope.action == "Start" ) {
             $scope.activity.starttime = new Date().getTime();
             $scope.activity.startposition = [$scope.lastposition.lat,
-                $scope.lastposition.lon];
+                $scope.lastposition.lng];
             var icon = L.icon( {
                 iconUrl: 'images/start-marker.png',
                 iconSize: [10, 10],
@@ -97,7 +97,19 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                         $scope.activity.averagepace = dt.getTime() / 
                             (60 * 1000 * $scope.activity.distance) ;
                     }
-                    $scope.activity.points.push(p);
+                    var segment = {
+                        coords: {
+                            lat: cp.lat,
+                            lng: cp.lng,
+                            accuracy: p.coords.accuracy,
+                            altitude: cp.altitude
+                            },
+                        timestamp: time,
+                        duration: dt.getTime(),
+                        pace: $scope.activity.pace,
+                        averagepace: $scope.activity.averagepace
+                        };
+                    $scope.activity.points.push(segment);
                     $scope.marker.setLatLng(cp);
                     $scope.line.addLatLng(cp);
                     map.setView(cp);
@@ -110,11 +122,16 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
         // stopping
 
         else {
-            $scope.action = "Start";
+            $scope.action = "Saving...";
+            $scope.buttonstatus = "disabled";
             navigator.geolocation.clearWatch($scope.watchid);
             $scope.activity.endtime=new Date().getTime();
+            $scope.activity.duration=$scope.activity.endtime -
+                $scope.activity.starttime;
             $scope.activity.endposition=[$scope.lastposition.lat,
-                $scope.lastposition.lon];
+                $scope.lastposition.lng];
+            
+            // save activity to localStorage
             var lsa = {
                 "starttime": $scope.activity.starttime,
                 "duration": $scope.activity.endtime-$scope.activity.starttime,
@@ -126,7 +143,27 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 localStorage.getItem("activities")) || []
             activities.push(lsa);
             localStorage.setItem("activities",JSON.stringify(activities));
-            window.location.hash = "#/activities";
+
+            // save activity data to sdcard
+            var sdcard = navigator.getDeviceStorage('sdcard');
+            var file = new Blob([JSON.stringify($scope.activity)],
+                                {type: "application/json"});
+            
+            var request = sdcard.addNamed(file, "actispy/"+
+                            $scope.activity.starttime + ".json");
+            
+            request.onsuccess=function() {
+                console.log("saved activity to 'actispy/" +
+                $scope.activity.starttime + ".json'");
+                // redirect to activities
+                window.location.hash = "#/activities";
+                }
+
+            request.onerror=function() {
+                console.warn('Unable to write: '+ this.error);
+                $scope.buttonstatus = "warning";
+                $scope.action = "Error Saving";
+                }
             }
         };
     
