@@ -1,4 +1,4 @@
-# Actispy - spy on your activities
+# Actispy - track your activities.
 
 Actispy is a activity tracking software to track activities such as:
 
