@@ -16,7 +16,6 @@
             "description": "Actispy stores data on your sdcard",
             "access": "readwrite"} 
         },
-    "appcache_path" : "/cache.manifest",
     "fullscreen": "true",
     "orientation": "portrait",
     "type":"privileged",
