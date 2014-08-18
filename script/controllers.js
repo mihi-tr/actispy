@@ -252,8 +252,7 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                         {
                         attribution: 'Map data &copy; OpenStreetMap, CC-BY-SA, Imagery &copy; Mapbox',
                         maxZoom: 18
-                        }).addTo(map);
-                
+                        }).addTo(map); 
                 var line=L.polyline([$scope.activity.startposition], {color: "#000080",
                     opacity: 0.8}).addTo(map);
 
@@ -279,6 +278,65 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                 L.marker($scope.activity.endposition, 
                         {icon: stopicon}).addTo(map);
                 
+                var setupsvg = function(sel) {
+                    var el=d3.select(sel)[0][0];
+                    var width=el.offsetWidth;
+                    var height=el.offsetHeight;
+                    return d3.select(sel).append("svg")
+                        .attr("width",width)
+                        .attr("height",height);
+                    };
+                
+                // pacegraph
+                var svg = setupsvg("#pacegraph");
+                var width = parseInt(svg.attr("width"));
+                var height = parseInt(svg.attr("height"));
+                var points = _.filter($scope.activity.points,function(d) 
+                    { return d.pace });
+
+                var mp = _.max(_.pluck(points,"pace"));
+                var minp = _.min(_.pluck(points,"pace"));
+
+                var ys = d3.scale.linear()
+                    .domain([minp,mp])
+                    .range([0,height-20]);
+
+                var xs = d3.scale.linear()
+                    .domain([0,$scope.activity.duration])
+                    .range([40,width]);
+                
+                var path = d3.svg.line()
+                    .x(function(d) { return xs(d.duration); })
+                    .y(function(d) { return ys(d.pace); });
+               
+               console.log(points);
+                svg.append("path")
+                    .attr("d",path(points));
+                
+                var xaxis = d3.svg.axis()
+                    .scale(xs)
+                    .orient("bottom")
+                    .ticks(5)
+                    .tickFormat(function(d) {
+                        return new Date(d).toUTCString().split(" ")[4]
+                        });
+                
+                svg.append("g")
+                    .attr("class","axis")
+                    .attr("transform","translate(0,"+ (height-20) +")")
+                    .call(xaxis);
+               
+                var yaxis = d3.svg.axis()
+                    .scale(ys)
+                    .orient("left")
+                    .ticks(5);
+                
+                svg.append("g")
+                    .attr("class","axis")
+                    .attr("transform","translate(40,0)")
+                    .call(yaxis);
+               
+
                 $scope.$apply();
             });
             reader.readAsText(this.result);
