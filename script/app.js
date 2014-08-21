@@ -2,6 +2,7 @@
 var actispyApp = angular.module('actispyApp', [
     'ngRoute',
     'ngTouch',
+    'actispyFilters',
     'actispyControllers'
     ]);
 
