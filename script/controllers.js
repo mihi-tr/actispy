@@ -117,7 +117,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                             lat: cp.lat,
                             lng: cp.lng,
                             accuracy: p.coords.accuracy,
-                            altitude: cp.altitude
+                            altitude: p.coords.altitude
                             },
                         timestamp: time,
                         duration: dt.getTime(),
@@ -294,7 +294,7 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                 var points = _.filter($scope.activity.points,function(d) 
                     { return d.pace });
 
-                var mp = _.max(_.pluck(points,"pace"));
+                var mp = _.min([_.max(_.pluck(points,"pace")),30]);
                 var minp = _.min(_.pluck(points,"pace"));
 
                 var ys = d3.scale.linear()
