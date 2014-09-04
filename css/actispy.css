@@ -151,4 +151,10 @@ form {
     font-size: 0.7em;
     }
     
+button > span {
+    display: none;
+    }
 
+button > span.active {
+    display: inline;
+    }

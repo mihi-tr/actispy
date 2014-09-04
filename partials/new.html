@@ -16,27 +16,32 @@
 </div>
 <div class="display pure-g">
     <div id="time" class="pure-u-1-2">
-        <h2>Timer</h2>
+        <h2 data-l10n="timer">Timer</h2>
         {{ timer }}
     </div>
     <div id="distance" class="pure-u-1-2">
-        <h2>Distance (km)</h2>
+        <h2><span data-l10n="distance">Distance</span> (km)</h2>
         {{ activity.distance  | number: 3 }} 
     </div>
     <div id="pace" class="pure-u-1-1">
-    <h2>Pace (min/km)</h2>
+    <h2><span data-l10n="pace">Pace</span> (min/km)</h2>
         <div class="pure-g">
         <div class="pure-u-1-2">
-        <small>cur</small> {{ activity.pace | pace }} 
+        <small data-l10n="cur">cur</small> {{ activity.pace | pace }} 
         </div>
         <div class="pure-u-1-2">
-        <small>avg</small> {{ activity.averagepace | pace }} 
+        <small cata-l10n="avg">avg</small> {{ activity.averagepace | pace }} 
         </div>
         </div>
     </div>
 </div>
 <div class="pure-g">
-<button class="pure-u-1 pure-button pure-button-{{buttonstatus}}" ng-click="toggleStart()">{{action}}</button>
+<button class="pure-u-1 pure-button pure-button-{{buttonstatus}}" ng-click="toggleStart()">
+<span l10n-data="wait" ng-class="{active: action=='Wait'}">Wait</span>
+<span l10n-data="start" ng-class="{active: action=='Start'}">Start</span>
+<span l10n-data="stop" ng-class="{active: action=='Stop'}">Stop</span>
+<span l10n-data="saving" ng-class="{active: action=='Saving...'}">Saving...</span>
+</button>
 </div>
 </div>
     <div id="map">

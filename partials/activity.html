@@ -9,25 +9,25 @@
     <strong>{{start}}</strong>
 </div>
     <div id="time" class="pure-u-1-2">
-        <h2>duration</h2>
+        <h2 data-l10n="duration">Duration</h2>
         {{ duration }}
     </div>
     <div id="distance" class="pure-u-1-2">
-        <h2>Distance (km)</h2>
+        <h2 data-l10n="distance">Distance (km)</h2>
         {{ activity.distance  | number: 3 }} 
     </div>
     <div id="pace" class="pure-u-1-2">
-    <h2>Avg. Pace (min/km)</h2>
+    <h2 data-l10n="avg-pace">Avg. Pace (min/km)</h2>
     {{activity.averagepace | pace
      }}
     </div>
 </div>
 <div id="map">
 </div>
-<h1>Pace</h1>
+<h1 data-l10n="pace">Pace</h1>
 <div id="pacegraph" class="graph">
 </div>
-<h1>Altitude</h1>
+<h1 data-l10n="altitude">Altitude</h1>
 <div id="altitudegraph" class="graph">
 </div>
 </div>
