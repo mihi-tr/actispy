@@ -33,8 +33,10 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.action = "Start"; 
             $scope.buttonstatus = "success";
             }
-        $scope.lastposition = L.latLng(p.coords.latitude, p.coords.longitude,
-            p.coords.altitude);    
+        $scope.lastposition = {coords: L.latLng(p.coords.latitude, 
+                                                p.coords.longitude, 
+                                                p.coords.altitude),
+                               altitude: p.coords.altitude};    
 
         // set map view to current position 
 
@@ -66,8 +68,8 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
 
         if ( $scope.action == "Start" ) {
             $scope.activity.starttime = new Date().getTime();
-            $scope.activity.startposition = [$scope.lastposition.lat,
-                $scope.lastposition.lng];
+            $scope.activity.startposition = [$scope.lastposition.coords.lat,
+                $scope.lastposition.coords.lng];
             var icon = L.icon( {
                 iconUrl: 'images/start-marker.png',
                 iconSize: [10, 10],
@@ -78,9 +80,9 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.action = "Stop";
             $scope.buttonstatus = "warning"; 
 
-            $scope.line = L.polyline([$scope.lastposition], {color: "#000080",
+            $scope.line = L.polyline([$scope.lastposition.coords], {color: "#000080",
                     opacity: 0.8}).addTo(map);
-            $scope.startmarker = L.marker($scope.lastposition,
+            $scope.startmarker = L.marker($scope.lastposition.coords,
                 {icon: icon}).addTo(map);
 
             // the uppdater - watches the position and updates!
@@ -102,10 +104,15 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                     return null;
                     };
 
-                var cp = L.latLng(p.coords.latitude,    p.coords.longitude,
-                    p.coords.altitude);
+                var cp = {coords: L.latLng(p.coords.latitude,
+                                           p.coords.longitude, 
+                                           p.coords.altitude),
+                          altitude: p.coords.altitude};
                 if ($scope.lastposition) {
-                        var d = $scope.lastposition.distanceTo(cp);
+                        // value altitude change in calculating distance
+                        var d = Math.sqrt(
+                            Math.pow($scope.lastposition.coords.distanceTo(cp.coords),2) +
+                            Math.pow($scope.lastposition.altitude - cp.altitude));
                         $scope.activity.distance += d/1000.0;
                         $scope.activity.pace = (time - $scope.lasttime) / 
                             (d * 60.0);
@@ -114,8 +121,8 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                     }
                     var segment = {
                         coords: {
-                            lat: cp.lat,
-                            lng: cp.lng,
+                            lat: cp.coords.lat,
+                            lng: cp.coords.lng,
                             accuracy: p.coords.accuracy,
                             altitude: p.coords.altitude
                             },
@@ -125,9 +132,9 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                         averagepace: $scope.activity.averagepace
                         };
                     $scope.activity.points.push(segment);
-                    $scope.marker.setLatLng(cp);
-                    $scope.line.addLatLng(cp);
-                    map.setView(cp);
+                    $scope.marker.setLatLng(cp.coords);
+                    $scope.line.addLatLng(cp.coords);
+                    map.setView(cp.coords);
                     $scope.lastposition = cp;
                     $scope.lasttime = time;
                     $scope.$apply();
