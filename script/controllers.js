@@ -145,7 +145,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.activity.endposition=[$scope.lastposition.lat,
                 $scope.lastposition.lng];
             
-            // save activity to localStorage
+            // save activity to index
             var lsa = {
                 "starttime": $scope.activity.starttime,
                 "duration": $scope.activity.endtime-$scope.activity.starttime,
@@ -153,11 +153,17 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 "distance": $scope.activity.distance,
                 "averagepace": $scope.activity.averagepace
                 }
-
-            var activities = JSON.parse(
-                localStorage.getItem("activities")) || []
-            activities.push(lsa);
-            localStorage.setItem("activities",JSON.stringify(activities));
+            
+            loadJSONFile("index",function(d) {
+                var activities = d;
+                activities.push(lsa);
+                saveJSONFile("index", activities,
+                    function(d) {}, function(e) {});
+                },
+                function(e) {
+                    activities = [lsa];
+                    saveJSONFile("index", activities,
+                    function(d) {}, function(e) {}) });
 
             // save activity data to sdcard
             saveJSONFile($scope.activity.starttime,
@@ -188,23 +194,28 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
 
 // activities controller   
 actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
-    var activities = JSON.parse(
-        localStorage.getItem("activities")) || [];
-    for (i in activities) {
-        activities[i].start = new Date(activities[i].starttime)
-            .toString()
-            .split(" ").slice(1,5).join(" ");
-        activities[i].duration = new Date(activities[i].duration)
-            .toUTCString().split(" ")[4];
-        };
-    $scope.activities=activities;
+    loadJSONFile("index",function(d) {
+        var activities = JSON.parse(
+            localStorage.getItem("activities")) || [];
+        for (i in activities) {
+            activities[i].start = new Date(activities[i].starttime)
+                .toString()
+                .split(" ").slice(1,5).join(" ");
+            activities[i].duration = new Date(activities[i].duration)
+                .toUTCString().split(" ")[4];
+            };
+        $scope.activities=activities;
+        $scope.$apply(); 
+        }, 
+        function(e) { 
+            console.log("cannot load activities "+ e.name); });
 
-    // Open Activity
+        // Open Activity
     $scope.openActivity = function(starttime) { 
         window.location.hash = "#/activity/"+starttime;
         };
 
-    // Go back to the menu
+        // Go back to the menu
     $scope.menu = function() {
         window.location.hash = "#/menu";
         }
