@@ -112,7 +112,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                         // value altitude change in calculating distance
                         var d = Math.sqrt(
                             Math.pow($scope.lastposition.coords.distanceTo(cp.coords),2) +
-                            Math.pow($scope.lastposition.altitude - cp.altitude));
+                            Math.pow($scope.lastposition.altitude - cp.altitude,2));
                         $scope.activity.distance += d/1000.0;
                         $scope.activity.pace = (time - $scope.lasttime) / 
                             (d * 60.0);
@@ -149,8 +149,8 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
             $scope.activity.endtime=new Date().getTime();
             $scope.activity.duration=$scope.activity.endtime -
                 $scope.activity.starttime;
-            $scope.activity.endposition=[$scope.lastposition.lat,
-                $scope.lastposition.lng];
+            $scope.activity.endposition=[$scope.lastposition.coords.lat,
+                $scope.lastposition.coords.lng];
             
             // save activity to index
             var lsa = {
@@ -161,16 +161,7 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 "averagepace": $scope.activity.averagepace
                 }
             
-            loadJSONFile("index",function(d) {
-                var activities = d;
-                activities.push(lsa);
-                saveJSONFile("index", activities,
-                    function(d) {}, function(e) {});
-                },
-                function(e) {
-                    activities = [lsa];
-                    saveJSONFile("index", activities,
-                    function(d) {}, function(e) {}) });
+            updateIndex(lsa);
 
             // save activity data to sdcard
             saveJSONFile($scope.activity.starttime,
@@ -235,7 +226,6 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
         // say loading until fully loaded 
         $scope.loaded = false;
         $scope.message = "loading...";
-        console.log($routeParams);
 
         // load activity from sdcard
         var sdcard= navigator.getDeviceStorage('sdcard');
@@ -243,7 +233,6 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                 $scope.activity= d;
                 $scope.message = "loaded";
                 $scope.loaded = true;
-                console.log($scope.activity);
                 $scope.duration = new Date($scope.activity.duration)
                     .toUTCString().split(" ")[4];
                 
@@ -312,7 +301,6 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                     .x(function(d) { return xs(d.duration); })
                     .y(function(d) { return ys(d.pace); });
                
-               console.log(points);
                 svg.append("path")
                     .attr("d",path(points));
                 
