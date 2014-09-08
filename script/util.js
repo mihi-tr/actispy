@@ -1,6 +1,6 @@
 function loadJSONFile(f,callback,error) {
     var sdcard= navigator.getDeviceStorage('sdcard');
-    var filename = 'actispy/'+$routeParams.starttime+'.json';
+    var filename = 'actispy/'+f+'.json';
     console.log("trying to load '"+filename+"'");
     var request = sdcard.get(filename);
 

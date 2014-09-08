@@ -153,31 +153,22 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 "distance": $scope.activity.distance,
                 "averagepace": $scope.activity.averagepace
                 }
+
             var activities = JSON.parse(
                 localStorage.getItem("activities")) || []
             activities.push(lsa);
             localStorage.setItem("activities",JSON.stringify(activities));
 
             // save activity data to sdcard
-            var sdcard = navigator.getDeviceStorage('sdcard');
-            var file = new Blob([JSON.stringify($scope.activity)],
-                                {type: "application/json"});
-            
-            var request = sdcard.addNamed(file, "actispy/"+
-                            $scope.activity.starttime + ".json");
-            
-            request.onsuccess=function() {
-                console.log("saved activity to 'actispy/" +
-                $scope.activity.starttime + ".json'");
-                // redirect to activities
-                window.location.hash = "#/activity/"+$scope.activity.starttime;
-                }
-
-            request.onerror=function() {
-                console.warn('Unable to write: '+ this.error);
-                $scope.buttonstatus = "warning";
-                $scope.action = "Error Saving";
-                }
+            saveJSONFile($scope.activity.starttime,
+                $scope.activity, 
+                function(d) {
+                    window.location.hash = "#/activity/" +$scope.activity.starttime; },
+                function(d) {
+                    console.warn("unable to write" + this.error);
+                    $scope.buttonstatus = "warning";
+                    $scope.action = "Error Saving";
+                    });
             }
         };
     
@@ -230,14 +221,8 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
 
         // load activity from sdcard
         var sdcard= navigator.getDeviceStorage('sdcard');
-        var filename = 'actispy/'+$routeParams.starttime+'.json';
-        console.log("trying to load '"+filename+"'");
-        var request = sdcard.get(filename);
-        request.onsuccess = function() {
-            console.log("success!");
-            var reader = new FileReader();
-            reader.addEventListener("loadend", function() {
-                $scope.activity= JSON.parse(this.result);
+        loadJSONFile($routeParams.starttime,function(d) {
+                $scope.activity= d;
                 $scope.message = "loaded";
                 $scope.loaded = true;
                 console.log($scope.activity);
@@ -338,17 +323,14 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                
 
                 $scope.$apply();
+            },
+            function(e) {
+                $scope.message = "Error to load file: "+ e.name;
+                console.log(e);
+                console.log($routeParams.starttime);
+                console.log(request);
+                $scope.$apply();
             });
-            reader.readAsText(this.result);
-            };
-
-        request.onerror = function() {
-            $scope.message = "Error to load file: "+ this.error.name;
-            console.log(this.error);
-            console.log($routeParams.starttime);
-            console.log(request);
-            $scope.$apply();
-            };
 
         // Go back to the menu
         $scope.menu = function() {
