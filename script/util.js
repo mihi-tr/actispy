@@ -36,6 +36,4 @@ function saveJSONFile(f, o, callback, error) {
           console.warn('Unable to write: '+ this.error);
           error(this.error);
            }
-        }
         };
-    }
