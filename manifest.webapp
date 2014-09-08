@@ -19,7 +19,10 @@
     "fullscreen": "true",
     "orientation": "portrait",
     "type":"privileged",
-    "version":"0.2-SNAPSHOT"
+    "version":"0.2-SNAPSHOT",
+    "default-locale": "en",
+    "locales": { }
+
 
 
 }
