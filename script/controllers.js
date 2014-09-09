@@ -160,8 +160,18 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
                 "distance": $scope.activity.distance,
                 "averagepace": $scope.activity.averagepace
                 }
+           
+            var activities = JSON.parse(
+                localStorage.getItem("activities")) || []
+            activities.push(lsa);
+            localStorage.setItem("activities",JSON.stringify(activities));
+
+            // save activities to sdcard
             
-            updateIndex(lsa);
+            saveJSONFile("index",activities,
+                function() { console.log("index saved") },
+                function(e) { console.warn("could not save index: " + 
+                                e.name); });
 
             // save activity data to sdcard
             saveJSONFile($scope.activity.starttime,
@@ -192,23 +202,17 @@ actispyControllers.controller('NewActivityCtrl', ['$scope', function($scope) {
 
 // activities controller   
 actispyControllers.controller('ActivitiesCtrl', ['$scope' , function($scope) {
-    loadJSONFile("index",function(d) {
-        var activities = JSON.parse(
-            localStorage.getItem("activities")) || [];
-        for (i in activities) {
-            activities[i].start = new Date(activities[i].starttime)
-                .toString()
-                .split(" ").slice(1,5).join(" ");
-            activities[i].duration = new Date(activities[i].duration)
-                .toUTCString().split(" ")[4];
-            };
-        $scope.activities=activities;
-        $scope.$apply(); 
-        }, 
-        function(e) { 
-            console.log("cannot load activities "+ e.name); });
-
-        // Open Activity
+    var activities = JSON.parse(localStorage.getItem("activities")) || [];
+    for (i in activities) {
+        activities[i].start = new Date(activities[i].starttime)
+            .toString()
+            .split(" ").slice(1,5).join(" ");
+        activities[i].duration = new Date(activities[i].duration)
+            .toUTCString().split(" ")[4];
+        };
+    $scope.activities=activities;
+    
+    // Open Activity
     $scope.openActivity = function(starttime) { 
         window.location.hash = "#/activity/"+starttime;
         };
@@ -334,7 +338,6 @@ actispyControllers.controller('ActivityCtrl', ['$scope', '$routeParams' ,
                 $scope.message = "Error to load file: "+ e.name;
                 console.log(e);
                 console.log($routeParams.starttime);
-                console.log(request);
                 $scope.$apply();
             });
 

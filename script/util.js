@@ -34,32 +34,14 @@ function saveJSONFile(f, o, callback, error) {
            }
         };
 
-function updateIndex(o) {
-    var sdcard = navigator.getDeviceStorage('sdcard');
-    var request = sdcard.getEditable("actispy/index.json");
+function loadActivities() {
+    if (! localStorage.getItem("activities")) {
+        loadJSONFile("index",function(d) {
+            localStorage.setItem("activities",JSON.stringify(d));
+            }, 
+        function(e) {
+            console.warn("could not read index: "+e.name);} )
+    };    
+    };
 
-    request.onsuccess=function() {
-        var file= this.result;
-        var reader = new FileReader();
-        reader.addEventListener("loadend", function() {
-            console.log("index loaded");
-            var activities = JSON.parse(this.result);
-            console.log(activities);
-            activities.push(o);
-            wf = file.open("readwrite")
-            wf.location = 0;
-            writer = wf.write(JSON.stringify(activities));
-            writer.onsuccess= function() {
-                console.log("saved index");
-                };
-            writer.onerror= function() {
-                console.log("error updating index: "+this.error.name);
-                }
-            });
-        reader.readAsText(file);
-        }
-    
-    request.onerror = function() {
-        console.warn('unable to update index: '+ this.error.name);
-        }
-    }
+loadActivities();    
