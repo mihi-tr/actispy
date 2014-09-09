@@ -36,12 +36,32 @@ function saveJSONFile(f, o, callback, error) {
 
 function loadActivities() {
     if (! localStorage.getItem("activities")) {
-        loadJSONFile("index",function(d) {
-            localStorage.setItem("activities",JSON.stringify(d));
-            }, 
-        function(e) {
-            console.warn("could not read index: "+e.name);} )
+        var sdcard = navigator.getDeviceStorage('sdcard');
+        var cursor = sdcard.enumerate("actispy");
+        
+        var activities=[];
+        cursor.onsuccess = function() {
+            var file = this.result;
+            if (file.name.match("actispy/[0-9]+.json$")) {
+                var reader = new FileReader();
+                reader.addEventListener("loadend", function() {
+                    var d = JSON.parse(this.result); 
+                    d.points=null;
+                    activities.push(d);
+                    localStorage.setItem("activities",JSON.stringify(activities));
+                    })
+                console.log("adding "+file.name+" to activities");    
+                reader.readAsText(file);    
+                }
+            if (! this.done) {
+                this.continue();
+                }
+            };
+
+        cursor.onerror = function() {
+            console.warn("cannot read files: "+ this.error.name);
+            }
     };    
     };
 
-loadActivities();    
+loadActivities();
